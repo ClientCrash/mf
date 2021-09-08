@@ -3,9 +3,16 @@ name = "mf"
 description="Creating files is my job."
 version = "0.1.0"
 edition = "2018"
+include = [
+	"src/**/*",
+	"Cargo.toml",
+	"README.md",
+	"LICENCE"
+]
 homepage = "https://github.com/clientcrash"
 repository = "https://github.com/clientcrash/mf"
 keywords = ["cli", "create", "files"]
+license="MIT"
 categories = ["command-line-utilities"]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
