@@ -6,7 +6,7 @@ fn main() {
     for arg in args {
         println!("Creating {}", arg);
         let _file = OpenOptions::new().write(true).create_new(true).open(arg);
-        numbercreated+=1;
+        numbercreated += 1;
     }
-    println!("Done. Created {} files.",numbercreated);
+    println!("Done. Created {} file/s.", numbercreated);
 }
