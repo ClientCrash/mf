@@ -27,6 +27,8 @@ fn main() {
         println!("modes:");
         println!("-h: Help | -c Create file/s | -m Merge file/s | -r Delete file/s");
         println!("!! If the mode is modify first file is target file name !!");
+        println!("https://github.com/clientcrash/mf");
+
     }
 
     else if mode == "-r" {
