@@ -3,6 +3,12 @@
 ![Crates.io](https://img.shields.io/crates/d/mf?style=flat-square) ![GitHub repo size](https://img.shields.io/github/repo-size/clientcrash/mf?style=flat-square)
 ### I modify files.
 
+### Installation
+
+ - With cargo (rust package manager)  
+        
+        cargo install mf
+
 
 ### Usage
 
