@@ -20,6 +20,6 @@
 
         -h: Help | -c Create file/s | -m Merge file/s | -r Delete file/s
 
-        !! If the mode is modify first file is target file name !!
+        !! If the mode is merge, first file is target file name !!
 
 
