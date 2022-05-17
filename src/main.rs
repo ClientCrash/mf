@@ -1,7 +1,8 @@
 use std::env;
 use std::fs::OpenOptions;
 use std::fs;
-use std::io::Write;
+use std::io::{ErrorKind, Write};
+
 fn main() {
     let mut modifications = 0;
     let mut args: Vec<String> = env::args().skip(1).collect();
@@ -14,11 +15,16 @@ fn main() {
 
 
     if mode == "-c" {
-            
+
         for arg in args {
             println!("Creating {}", arg);
-            let _file = OpenOptions::new().write(true).create_new(true).open(arg);
-            modifications += 1;
+            if let Err(error) = OpenOptions::new().write(true).create_new(true).open(&arg) {
+                if error.kind() == ErrorKind::AlreadyExists {
+                    println!("File {} already exists.", arg);
+                }
+            } else {
+                modifications += 1;
+            }
         }
 
     }
