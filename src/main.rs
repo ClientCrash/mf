@@ -13,7 +13,7 @@ fn main() {
     let mode = args[0].clone();
     args.remove(0);
 
-    if mode == "-c" {
+    if mode == "-c" || mode == "--create" {
         for arg in args {
             println!("Creating {}", arg);
             if let Err(error) = OpenOptions::new().write(true).create_new(true).open(&arg) {
@@ -24,19 +24,19 @@ fn main() {
                 modifications += 1;
             }
         }
-    } else if mode == "-h" {
+    } else if mode == "-h" || mode == "--help" {
         println!("mf <mode> [file ... file ... file]");
         println!("modes:");
         println!("-h: Help | -c Create file/s | -m Merge file/s | -r Delete file/s");
         println!("!! If the mode is modify first file is target file name !!");
         println!("https://github.com/clientcrash/mf");
-    } else if mode == "-r" {
+    } else if mode == "-r" || mode == "--remove" {
         for arg in args {
             println!("Removing {}", arg);
             fs::remove_file(arg).expect("File removal failed.");
             modifications += 1;
         }
-    } else if mode == "-m" {
+    } else if mode == "-m" || mode == "--merge" {
         let target = args[0].clone();
         args.remove(0);
         let mut c = Vec::new();
@@ -58,6 +58,9 @@ fn main() {
         for content in c {
             write!(file, "{}", content).expect("Write failed.");
         }
+    } else {
+        println!("Unknown mode '{}'", mode);
+        println!("Try 'mf --help'");
     }
 
     println!("Done. created/modified {} file/s.", modifications);
