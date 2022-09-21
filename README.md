@@ -9,6 +9,9 @@
         
         cargo install mf
 
+#### Examples
+This merges file 1.txt and 2.txt into one file called target.txt    
+       ` mf -m target.txt 1.txt 2.txt `
 
 ### Usage
 
@@ -20,6 +23,7 @@
 
         -h: Help | -c Create file/s | -m Merge file/s | -r Delete file/s
 
+        
         !! If the mode is merge, first file is target file name !!
 
 
