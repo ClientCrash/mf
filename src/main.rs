@@ -18,58 +18,66 @@ fn create(args: &Vec<String>) -> u32 {
     let mut modifications = 0;
 
     for arg in args {
-        println!("Creating {}", arg);
-        if let Err(error) = OpenOptions::new().write(true).create_new(true).open(&arg) {
-            if error.kind() == ErrorKind::AlreadyExists {
-                println!("File {} already exists.", arg);
+
+        println!("creating file {}...", arg);
+
+        if let Err(err) = OpenOptions::new().write(true).create_new(true).open(&arg) {
+            
+            if err.kind() == ErrorKind::AlreadyExists {
+                println!("error: file {} exists already.", arg);
             }
+
         } else {
             modifications += 1;
         }
     }
 
-    return modifications;
+    modifications
 }
 
 fn remove(args: &Vec<String>) -> u32 {
     let mut modifications = 0;
 
     for arg in args {
-        println!("Removing {}", arg);
-        fs::remove_file(arg).expect("File removal failed.");
+
+        println!("removing file {}...", arg);
+
+        fs::remove_file(arg)
+            .expect("error: could not remove file.");
+
         modifications += 1;
     }
 
-    return modifications;
+    modifications
 }
 
 fn merge(args: &mut Vec<String>) -> u32 {
     let mut modifications = 0;
 
-    let target = args[0].clone();
-    args.remove(0);
+    println!("creating file {}...", args[0]);
 
-    let mut c = Vec::new();
-    for arg in args {
-        println!("Reading {}", arg);
-        let fc = fs::read_to_string(arg).expect("Read failed.");
-        c.push(fc);
-    }
-
-    println!("Writing {}", target);
-    modifications += 1;
-
-    let mut file = OpenOptions::new()
+    let mut target_file = OpenOptions::new()
         .write(true)
         .create_new(true)
         .append(true)
-        .open(target)
-        .unwrap();
-    for content in c {
-        write!(file, "{}", content).expect("Write failed.");
+        .open(&args[0])
+        .expect("error: could not create merge target");
+
+    args.remove(0);
+
+    for arg in args {
+        println!("reading file {}...", arg);
+        
+        let file_contents = fs::read_to_string(arg)
+            .expect("error: could not read file.");
+
+        write!(target_file, "{}", file_contents)
+            .expect("error: could not write to merge target.");
+
+        modifications += 1;
     }
 
-    return modifications;
+    modifications
 }
 
 fn main() {
@@ -95,12 +103,12 @@ fn main() {
             exit(0);
         },
         _ => {
-            println!("Unknown mode '{}'", command);
+            println!("error: unknown command '{}'", command);
             print_help(exec);
             exit(1);
         },
     };
 
-    println!("Done. Created/Modified {} file/s.", modifications);
+    println!("finished creating/modifying {} file/s.", modifications);
 }
 
