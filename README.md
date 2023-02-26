@@ -1,6 +1,6 @@
 # mf 
     
-![Crates.io](https://img.shields.io/crates/d/mf?style=flat-square) ![GitHub repo size](https://img.shields.io/github/repo-size/clientcrash/mf?style=flat-square)
+![Crates.io](https://img.shields.io/crates/d/mf?style=flat-square) ![GitHub repo size](https://img.shields.io/github/repo-size/clientcrash/mf?style=flat-square) ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/clientcrash/mf/rust.yml?style=flat-square)
 
 ### I work with files.
 
