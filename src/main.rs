@@ -7,7 +7,7 @@ use std::process::exit;
 fn print_help(exec: String) {
     println!("Usage: {} <COMMAND> [FILES ...]
 
-Command:
+Commands:
     h, help             Print help information
     c  create           Create file/s
     m, merge <TARGET>   Merge files into target

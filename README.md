@@ -5,25 +5,31 @@
 
 ### Installation
 
- - With cargo (rust package manager)  
+ - using cargo (rust package manager)  
         
         cargo install mf
 
 #### Examples
-This merges file 1.txt and 2.txt into one file called target.txt    
-       ` mf -m target.txt 1.txt 2.txt `
+
+This create the files foo.txt and bar.txt:
+
+	mf create foo.txt bar.txt
+
+This removes the files foo.txt and bar.txt:
+
+	mf remove foo.txt bar.txt
+
+This merges the files foo.txt and bar.txt into foobar.txt:
+
+	mf merge foobar.txt foo.txt bar.txt
 
 ### Usage
 
+	mf <COMMAND> [FILES ...]
 
-
-        mf <mode> [file ... file ... file]
-
-        modes:
-
-        -h: Help | -c Create file/s | -m Merge file/s | -r Delete file/s
-
-        
-        !! If the mode is merge, first file is target file name !!
-
+	Commands:
+		h, help             Print help information
+		c  create           Create file/s
+		m, merge <TARGET>   Merge files into target
+		r, remove           Remove files
 
