@@ -9,7 +9,7 @@ fn print_help(exec: String) {
 
 Commands:
     h, help             Print help information
-    c  create           Create file/s
+    c, create           Create file/s
     m, merge <TARGET>   Merge files into target
     r, remove           Remove files", exec);
 }
