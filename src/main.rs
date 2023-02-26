@@ -63,7 +63,7 @@ fn merge(args: &[String]) -> u32 {
         .create_new(true)
         .append(true)
         .open(&args[0])
-        .expect("error");
+        .expect("error: could not create merge target.");
 
     for arg in args[1..].iter() {
         println!("reading file '{}'...", arg);
