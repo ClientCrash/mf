@@ -1,19 +1,23 @@
 [package]
 name = "mf"
-description="I work with files."
+description ="I modify files."
 version = "2.1.0"
 edition = "2018"
+license = "MIT"
+
 include = [
 	"src/**/*",
 	"Cargo.toml",
 	"README.md",
 	"LICENCE"
 ]
+
 homepage = "https://github.com/clientcrash"
 repository = "https://github.com/clientcrash/mf"
-keywords = ["cli", "create", "files", "util"]
-license="MIT"
-categories = ["command-line-utilities"]
+
+keywords = [ "cli", "create", "files", "util" ]
+categories = [ "command-line-utilities" ]
+
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
