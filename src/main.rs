@@ -5,16 +5,13 @@ use std::io::{ ErrorKind, Write };
 use std::process::exit;
 
 fn print_help(exec: String) {
-    println!("Usage: {} <MODE> [FILES ...]", exec);
+    println!("Usage: {} <MODE> [FILES ...]
 
-    println!("Modes:");
-    println!("\t-h, --help  \tPrint help information");
-    println!("\t-c, --create\tCreate file/s");
-    println!("\t-m, --merge \tMerge files");
-    println!("\t-r, --remove\tRemove file/s");
-
-    println!("!! If the mode is modify first file is target file name !!");
-    println!("https://github.com/clientcrash/mf");
+Modes:
+    h, help             Print help information
+    c  create           Create file/s
+    m, merge <TARGET>   Merge files into target
+    r, remove           Remove files", exec);
 }
 
 fn create(args: &Vec<String>) -> u32 {
@@ -90,10 +87,10 @@ fn main() {
     args.remove(0);
 
     let modifications = match mode.as_str() {
-        "-c" | "--create" => create(&args),
-        "-r" | "--remove" => remove(&args),
-        "-m" | "--merge" => merge(&mut args),
-        "-h" | "--help" => {
+        "c" | "create" => create(&args),
+        "r" | "remove" => remove(&args),
+        "m" | "merge" => merge(&mut args),
+        "h" | "help" => {
             print_help(exec);
             exit(0);
         },
