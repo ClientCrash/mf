@@ -11,7 +11,7 @@
 
 #### Examples
 
-This create the files foo.txt and bar.txt:
+This creates the files foo.txt and bar.txt:
 
 	mf create foo.txt bar.txt
 
