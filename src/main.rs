@@ -5,9 +5,9 @@ use std::io::{ ErrorKind, Write };
 use std::process::exit;
 
 fn print_help(exec: String) {
-    println!("Usage: {} <MODE> [FILES ...]
+    println!("Usage: {} <COMMAND> [FILES ...]
 
-Modes:
+Command:
     h, help             Print help information
     c  create           Create file/s
     m, merge <TARGET>   Merge files into target
@@ -83,10 +83,10 @@ fn main() {
         return;
     }
 
-    let mode = args[0].clone();
+    let command = args[0].clone();
     args.remove(0);
 
-    let modifications = match mode.as_str() {
+    let modifications = match command.as_str() {
         "c" | "create" => create(&args),
         "r" | "remove" => remove(&args),
         "m" | "merge" => merge(&mut args),
@@ -95,7 +95,7 @@ fn main() {
             exit(0);
         },
         _ => {
-            println!("Unknown mode '{}'", mode);
+            println!("Unknown mode '{}'", command);
             print_help(exec);
             exit(1);
         },
