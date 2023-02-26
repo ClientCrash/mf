@@ -24,7 +24,7 @@ fn create(args: &Vec<String>) -> u32 {
         match OpenOptions::new()
             .write(true)
             .create_new(true)
-            .open(&arg) {
+            .open(arg) {
             Ok(_) => modifications += 1,
             Err(error) => match error.kind() {
                 ErrorKind::AlreadyExists =>
@@ -86,7 +86,7 @@ fn main() {
     let exec = args[0].clone();
     args.remove(0);
 
-    if args.len() < 1 {
+    if args.is_empty() {
         print_help(exec);
         return;
     }
