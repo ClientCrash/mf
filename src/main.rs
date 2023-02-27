@@ -50,10 +50,16 @@ fn remove(args: &Vec<String>) {
 
         print!("removing file {}...\r", arg);
 
-        fs::remove_file(arg)
-            .expect("error: could not remove file");
-
-        modifications += 1;
+        match fs::remove_file(arg) {
+            Ok(_) => modifications += 1,
+            Err(error) => match error.kind() {
+                ErrorKind::PermissionDenied =>
+                    println!("error: missing permission to remove file '{}'", arg),
+                ErrorKind::NotFound =>
+                    println!("error: file '{}' does not exist", arg),
+                _ => {},
+            }
+        }
     }
 
     if modifications == 0 {
