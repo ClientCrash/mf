@@ -19,16 +19,20 @@ fn create(args: &Vec<String>) -> u32 {
 
     for arg in args {
 
-        println!("creating file {}...", arg);
+        println!("creating file '{}'...", arg);
 
-        if let Err(err) = OpenOptions::new().write(true).create_new(true).open(&arg) {
-            
-            if err.kind() == ErrorKind::AlreadyExists {
-                println!("error: file {} exists already.", arg);
+        match OpenOptions::new()
+            .write(true)
+            .create_new(true)
+            .open(arg) {
+            Ok(_) => modifications += 1,
+            Err(error) => match error.kind() {
+                ErrorKind::AlreadyExists =>
+                    println!("error: file '{}' already exists.", arg),
+                ErrorKind::PermissionDenied =>
+                    println!("error: missing permission to create file '{}'", arg),
+                _ => {},
             }
-
-        } else {
-            modifications += 1;
         }
     }
 
@@ -51,22 +55,18 @@ fn remove(args: &Vec<String>) -> u32 {
     modifications
 }
 
-fn merge(args: &mut Vec<String>) -> u32 {
+fn merge(args: &[String]) -> u32 {
     let mut modifications = 0;
-
-    println!("creating file {}...", args[0]);
 
     let mut target_file = OpenOptions::new()
         .write(true)
         .create_new(true)
         .append(true)
         .open(&args[0])
-        .expect("error: could not create merge target");
+        .expect("error: could not create merge target.");
 
-    args.remove(0);
-
-    for arg in args {
-        println!("reading file {}...", arg);
+    for arg in args[1..].iter() {
+        println!("reading file '{}'...", arg);
         
         let file_contents = fs::read_to_string(arg)
             .expect("error: could not read file.");
@@ -76,7 +76,7 @@ fn merge(args: &mut Vec<String>) -> u32 {
 
         modifications += 1;
     }
-
+    
     modifications
 }
 
@@ -86,7 +86,7 @@ fn main() {
     let exec = args[0].clone();
     args.remove(0);
 
-    if args.len() < 1 {
+    if args.is_empty() {
         print_help(exec);
         return;
     }
@@ -97,7 +97,7 @@ fn main() {
     let modifications = match command.as_str() {
         "c" | "create" => create(&args),
         "r" | "remove" => remove(&args),
-        "m" | "merge" => merge(&mut args),
+        "m" | "merge" => merge(&args[..]),
         "h" | "help" => {
             print_help(exec);
             exit(0);
