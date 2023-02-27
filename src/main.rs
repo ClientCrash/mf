@@ -70,6 +70,12 @@ fn remove(args: &Vec<String>) {
 }
 
 fn merge(args: &[String]) {
+
+    if args.is_empty() {
+        println!("error: no target file specified");
+        return;
+    }
+
     let mut modifications = 0;
 
     let mut target_file = OpenOptions::new()
