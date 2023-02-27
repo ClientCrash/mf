@@ -14,12 +14,12 @@ Commands:
     r, remove           Remove files", exec);
 }
 
-fn create(args: &Vec<String>) -> u32 {
+fn create(args: &Vec<String>) {
     let mut modifications = 0;
 
     for arg in args {
 
-        println!("creating file '{}'...", arg);
+        print!("creating file '{}'...\r", arg);
 
         match OpenOptions::new()
             .write(true)
@@ -28,7 +28,7 @@ fn create(args: &Vec<String>) -> u32 {
             Ok(_) => modifications += 1,
             Err(error) => match error.kind() {
                 ErrorKind::AlreadyExists =>
-                    println!("error: file '{}' already exists.", arg),
+                    println!("error: file '{}' already exists", arg),
                 ErrorKind::PermissionDenied =>
                     println!("error: missing permission to create file '{}'", arg),
                 _ => {},
@@ -36,26 +36,34 @@ fn create(args: &Vec<String>) -> u32 {
         }
     }
 
-    modifications
+    if modifications == 0 {
+        println!("no files were created");
+    } else {
+        println!("successfully created {} file/s", modifications);
+    }
 }
 
-fn remove(args: &Vec<String>) -> u32 {
+fn remove(args: &Vec<String>) {
     let mut modifications = 0;
 
     for arg in args {
 
-        println!("removing file {}...", arg);
+        print!("removing file {}...\r", arg);
 
         fs::remove_file(arg)
-            .expect("error: could not remove file.");
+            .expect("error: could not remove file");
 
         modifications += 1;
     }
 
-    modifications
+    if modifications == 0 {
+        println!("no files were removed");
+    } else {
+        println!("successfully removed {} file/s", modifications);
+    }
 }
 
-fn merge(args: &[String]) -> u32 {
+fn merge(args: &[String]) {
     let mut modifications = 0;
 
     let mut target_file = OpenOptions::new()
@@ -63,21 +71,25 @@ fn merge(args: &[String]) -> u32 {
         .create_new(true)
         .append(true)
         .open(&args[0])
-        .expect("error: could not create merge target.");
+        .expect("error: could not create merge target");
 
     for arg in args[1..].iter() {
-        println!("reading file '{}'...", arg);
+        print!("reading file '{}'...\r", arg);
         
         let file_contents = fs::read_to_string(arg)
-            .expect("error: could not read file.");
+            .expect("error: could not read file");
 
         write!(target_file, "{}", file_contents)
-            .expect("error: could not write to merge target.");
+            .expect("error: could not write to merge target");
 
         modifications += 1;
     }
-    
-    modifications
+
+    if modifications == 0 {
+        println!("no files were merged");
+    } else {
+        println!("successfully merged {} file/s into '{}'", modifications, args[0]);
+    }
 }
 
 fn main() {
@@ -94,21 +106,16 @@ fn main() {
     let command = args[0].clone();
     args.remove(0);
 
-    let modifications = match command.as_str() {
+    match command.as_str() {
         "c" | "create" => create(&args),
         "r" | "remove" => remove(&args),
         "m" | "merge" => merge(&args[..]),
-        "h" | "help" => {
-            print_help(exec);
-            exit(0);
-        },
+        "h" | "help" => print_help(exec),
         _ => {
             println!("error: unknown command '{}'", command);
             print_help(exec);
             exit(1);
         },
     };
-
-    println!("finished creating/modifying {} file/s.", modifications);
 }
 
