@@ -9,7 +9,7 @@ fn print_help(exec: String) {
 
 Commands:
     h, help             Print help information
-    c, create           Create file/s
+    c, create           Create file/s 
     m, merge <TARGET>   Merge files into target
     r, remove           Remove files", exec);
 }
@@ -19,7 +19,7 @@ fn create(args: &Vec<String>) -> u32 {
 
     for arg in args {
 
-        print!("creating file '{}'...\r", arg);
+        println!("creating file '{}'...", arg);
 
         match OpenOptions::new()
             .write(true)
@@ -44,7 +44,7 @@ fn remove(args: &Vec<String>) -> u32 {
 
     for arg in args {
 
-        print!("removing file {}...\r", arg);
+        println!("removing file {}...", arg);
 
         match fs::remove_file(arg) {
             Ok(_) => modifications += 1,
@@ -80,7 +80,7 @@ fn merge(args: &[String]) -> u32 {
         .expect("error: could not create merge target");
 
     for arg in args[1..].iter() {
-        print!("reading file '{}'...\r", arg);
+        println!("reading file '{}'...", arg);
         
         let file_contents = fs::read_to_string(arg)
             .expect("error: could not read file");
@@ -123,10 +123,6 @@ fn main() {
         },
     };
 
-    if modifications == 0 {
-        println!("no files were modified");
-    } else {
-        println!("modified {} files", modifications);
-    }
+    println!("modified {} files", modifications);
 }
 
