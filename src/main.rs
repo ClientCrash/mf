@@ -14,7 +14,7 @@ Commands:
     r, remove           Remove files", exec);
 }
 
-fn create(args: &Vec<String>) {
+fn create(args: &Vec<String>) -> u32 {
     let mut modifications = 0;
 
     for arg in args {
@@ -36,14 +36,10 @@ fn create(args: &Vec<String>) {
         }
     }
 
-    if modifications == 0 {
-        println!("no files were created");
-    } else {
-        println!("successfully created {} file/s", modifications);
-    }
+    modifications
 }
 
-fn remove(args: &Vec<String>) {
+fn remove(args: &Vec<String>) -> u32 {
     let mut modifications = 0;
 
     for arg in args {
@@ -62,14 +58,10 @@ fn remove(args: &Vec<String>) {
         }
     }
 
-    if modifications == 0 {
-        println!("no files were removed");
-    } else {
-        println!("successfully removed {} file/s", modifications);
-    }
+    modifications
 }
 
-fn merge(args: &[String]) {
+fn merge(args: &[String]) -> u32 {
 
     if args.is_empty() {
         println!("error: no target file specified");
@@ -97,11 +89,7 @@ fn merge(args: &[String]) {
         modifications += 1;
     }
 
-    if modifications == 0 {
-        println!("no files were merged");
-    } else {
-        println!("successfully merged {} file/s into '{}'", modifications, args[0]);
-    }
+    modifications
 }
 
 fn main() {
@@ -118,16 +106,25 @@ fn main() {
     let command = args[0].clone();
     args.remove(0);
 
-    match command.as_str() {
+    let modifications = match command.as_str() {
         "c" | "create" => create(&args),
         "r" | "remove" => remove(&args),
         "m" | "merge" => merge(&args[..]),
-        "h" | "help" => print_help(exec),
+        "h" | "help" => {
+            print_help(exec);
+            exit(0);
+        },
         _ => {
             println!("error: unknown command '{}'", command);
             print_help(exec);
             exit(1);
         },
     };
+
+    if modifications == 0 {
+        println!("no files were modified");
+    } else {
+        println!("modified {} files", modifications);
+    }
 }
 
