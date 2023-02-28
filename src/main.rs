@@ -63,12 +63,14 @@ fn remove(args: &Vec<String>) -> u32 {
 
 fn merge(args: &[String]) -> u32 {
 
+    let mut modifications = 0;
+
     if args.is_empty() {
         println!("error: no target file specified");
-        return;
+
+        return modifications;
     }
 
-    let mut modifications = 0;
 
     let mut target_file = OpenOptions::new()
         .write(true)
