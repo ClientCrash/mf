@@ -9,7 +9,7 @@ fn print_help(exec: String) {
 
 Commands:
     h, help             Print help information
-    c, create           Create file/s
+    c, create           Create file/s 
     m, merge <TARGET>   Merge files into target
     r, remove           Remove files", exec);
 }
@@ -28,7 +28,7 @@ fn create(args: &Vec<String>) -> u32 {
             Ok(_) => modifications += 1,
             Err(error) => match error.kind() {
                 ErrorKind::AlreadyExists =>
-                    println!("error: file '{}' already exists.", arg),
+                    println!("error: file '{}' already exists", arg),
                 ErrorKind::PermissionDenied =>
                     println!("error: missing permission to create file '{}'", arg),
                 _ => {},
@@ -46,37 +46,51 @@ fn remove(args: &Vec<String>) -> u32 {
 
         println!("removing file {}...", arg);
 
-        fs::remove_file(arg)
-            .expect("error: could not remove file.");
-
-        modifications += 1;
+        match fs::remove_file(arg) {
+            Ok(_) => modifications += 1,
+            Err(error) => match error.kind() {
+                ErrorKind::PermissionDenied =>
+                    println!("error: missing permission to remove file '{}'", arg),
+                ErrorKind::NotFound =>
+                    println!("error: file '{}' does not exist", arg),
+                _ => {},
+            }
+        }
     }
 
     modifications
 }
 
 fn merge(args: &[String]) -> u32 {
+
     let mut modifications = 0;
+
+    if args.is_empty() {
+        println!("error: no target file specified");
+
+        return modifications;
+    }
+
 
     let mut target_file = OpenOptions::new()
         .write(true)
         .create_new(true)
         .append(true)
         .open(&args[0])
-        .expect("error: could not create merge target.");
+        .expect("error: could not create merge target");
 
     for arg in args[1..].iter() {
         println!("reading file '{}'...", arg);
         
         let file_contents = fs::read_to_string(arg)
-            .expect("error: could not read file.");
+            .expect("error: could not read file");
 
         write!(target_file, "{}", file_contents)
-            .expect("error: could not write to merge target.");
+            .expect("error: could not write to merge target");
 
         modifications += 1;
     }
-    
+
     modifications
 }
 
@@ -109,6 +123,6 @@ fn main() {
         },
     };
 
-    println!("finished creating/modifying {} file/s.", modifications);
+    println!("modified {} files", modifications);
 }
 
